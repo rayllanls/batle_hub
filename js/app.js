@@ -369,9 +369,9 @@ function renderEventLink(events) {
 
     // Insere entre as tabs e o header do leaderboard
     const leaderboardSection = $("leaderboard-section");
-    const pointsHeader = leaderboardSection?.querySelector(".points-header");
-    if (pointsHeader) {
-        pointsHeader.parentNode.insertBefore(bar, pointsHeader);
+    const columnHeaders = leaderboardSection?.querySelector(".column-headers");
+    if (columnHeaders) {
+        columnHeaders.parentNode.insertBefore(bar, columnHeaders);
     }
 }
 
