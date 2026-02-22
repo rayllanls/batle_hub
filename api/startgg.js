@@ -52,7 +52,17 @@ module.exports = async function handler(req, res) {
                 event(slug: $slug) {
                     id name numEntrants
                     standings(query: { perPage: 64, page: 1 }) {
-                        nodes { placement entrant { id name } }
+                        nodes {
+                            placement
+                            entrant {
+                                id name
+                                participants {
+                                    user {
+                                        images { url type }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }`,

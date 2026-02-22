@@ -666,6 +666,85 @@ body::before {
   letter-spacing: 0.04em;
 }
 
+/* ---- Player Avatar ---- */
+.player-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  background: var(--bg2);
+}
+
+.player-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.rank-1 .player-avatar {
+  border-color: var(--gold);
+  box-shadow: 0 0 8px hsla(45, 100%, 55%, 0.3);
+}
+
+.rank-2 .player-avatar {
+  border-color: var(--silver);
+}
+
+.rank-3 .player-avatar {
+  border-color: var(--bronze);
+}
+
+/* ---- Event Link Bar ---- */
+.event-link-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted-fg);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: all 0.25s ease;
+}
+
+.event-link-bar:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface-hover);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.event-link-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0.8);
+}
+
+.event-link-bar:hover .event-link-icon {
+  filter: brightness(1);
+}
+
+.event-link-arrow {
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+.event-link-bar:hover .event-link-arrow {
+  transform: translate(2px, -2px);
+}
+
 .lb-right {
   display: flex;
   align-items: baseline;

@@ -145,6 +145,16 @@ async function fetchStartGGStandings(slug) {
     }
 }
 
+// ---- Extract profile image from start.gg participant ----
+function getProfileImage(entrant) {
+    const participants = entrant?.participants;
+    if (!participants || !participants.length) return "";
+    const images = participants[0]?.user?.images;
+    if (!images || !images.length) return "";
+    const profile = images.find((img) => img.type === "profile");
+    return profile?.url || images[0]?.url || "";
+}
+
 // ---- Process ETAPA Tab (new format: Link + Fotos) ----
 async function processNewFormat(rows, etapaNum, game, pointsTable) {
     const header = rows[0].map((h) => h.toLowerCase());
@@ -173,7 +183,7 @@ async function processNewFormat(rows, etapaNum, game, pointsTable) {
         }
     }
 
-    // Monta jogadores
+    // Monta jogadores (com avatar do start.gg)
     const players = (eventData.standings?.nodes || [])
         .filter((n) => n.entrant)
         .map((node, idx) => ({
@@ -181,6 +191,7 @@ async function processNewFormat(rows, etapaNum, game, pointsTable) {
             name: node.entrant.name,
             points: getPoints(node.placement, pointsTable),
             photoUrl: idx < photos.length ? photos[idx] : "",
+            avatarUrl: getProfileImage(node.entrant),
         }));
 
     return {
@@ -188,6 +199,7 @@ async function processNewFormat(rows, etapaNum, game, pointsTable) {
         name: `Etapa ${String(etapaNum).padStart(2, "0")}`,
         sheetName: `ETAPA${etapaNum}`,
         startggName: eventData.name,
+        startggUrl,
         players,
     };
 }
@@ -277,15 +289,17 @@ async function fetchAllEvents(game) {
 function calculateRanking(events, eventId) {
     const relevant = eventId ? events.filter((e) => e.id === eventId) : events;
     const map = {};
+    const avatars = {};
 
     for (const event of relevant) {
         for (const p of event.players) {
             map[p.name] = (map[p.name] || 0) + p.points;
+            if (p.avatarUrl && !avatars[p.name]) avatars[p.name] = p.avatarUrl;
         }
     }
 
     const sorted = Object.entries(map)
-        .map(([name, totalPoints]) => ({ name, totalPoints, rank: 0 }))
+        .map(([name, totalPoints]) => ({ name, totalPoints, rank: 0, avatarUrl: avatars[name] || "" }))
         .sort((a, b) => b.totalPoints - a.totalPoints);
 
     let currentRank = 1;
@@ -332,6 +346,35 @@ function renderEventTabs(events) {
     });
 }
 
+function renderEventLink(events) {
+    // Remove link anterior
+    const existing = document.querySelector(".event-link-bar");
+    if (existing) existing.remove();
+
+    if (!currentEventId) return;
+
+    const event = events.find((e) => e.id === currentEventId);
+    if (!event || !event.startggUrl) return;
+
+    const bar = document.createElement("a");
+    bar.className = "event-link-bar";
+    bar.href = event.startggUrl;
+    bar.target = "_blank";
+    bar.rel = "noopener noreferrer";
+    bar.innerHTML = `
+        <img src="assets/images/logo_stargg.png" alt="start.gg" class="event-link-icon" onerror="this.style.display='none'" />
+        <span>${escapeHtml(event.startggName || event.name)}</span>
+        <span class="event-link-arrow">↗</span>
+    `;
+
+    // Insere entre as tabs e o header do leaderboard
+    const leaderboardSection = $("leaderboard-section");
+    const pointsHeader = leaderboardSection?.querySelector(".points-header");
+    if (pointsHeader) {
+        pointsHeader.parentNode.insertBefore(bar, pointsHeader);
+    }
+}
+
 function getPlayerEtapaBreakdown(playerName, events) {
     return events.map((event) => {
         const player = event.players.find((p) => p.name === playerName);
@@ -361,9 +404,14 @@ function renderLeaderboard(ranking, events, limit = 10) {
         const rankClass =
             player.rank === 1 ? "r1" : player.rank === 2 ? "r2" : player.rank === 3 ? "r3" : "r-default";
 
+        const avatarHtml = player.avatarUrl
+            ? `<img class="player-avatar" src="${player.avatarUrl}" alt="" loading="lazy" onerror="this.style.display='none'" />`
+            : `<div class="player-avatar-placeholder"></div>`;
+
         row.innerHTML = `
       <div class="lb-left">
         <span class="rank-badge ${rankClass}">${player.rank}º</span>
+        ${avatarHtml}
         <span class="player-name">${escapeHtml(player.name)}</span>
         ${isGeral ? '<span class="expand-arrow">▼</span>' : ''}
       </div>
@@ -605,6 +653,7 @@ async function loadAndRender() {
 
         renderHeader(events);
         renderEventTabs(events);
+        renderEventLink(events);
 
         const ranking = calculateRanking(events, currentEventId);
         renderLeaderboard(ranking, events);
@@ -627,6 +676,7 @@ function selectEvent(eventId) {
     currentEventId = eventId;
     const events = eventsCache[currentGame] || [];
     renderEventTabs(events);
+    renderEventLink(events);
     const ranking = calculateRanking(events, currentEventId);
     renderLeaderboard(ranking, events);
     renderPhotoGallery(events);
