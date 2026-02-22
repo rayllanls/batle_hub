@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+  <title>ARKDEMIA — Road to Battle Coliseum</title>
+  <meta name="description"
+    content="Ranking e resultados do campeonato ARKDEMIA — Road to Battle Coliseum. SF6 e 2XKO." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<nav id="top-navbar" class="top-navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <span class="brand-text">ARK<span class="brand-accent">DEMIA</span></span>
+    </div>
+    <div class="navbar-links">
+      <a href="#leaderboard-section">Ranking</a>
+      <a href="#photo-gallery">Fotos</a>
+      <a href="#sobre">Sobre</a>
+    </div>
+    <div class="navbar-social">
+      <a href="https://www.instagram.com/arkdbar" target="_blank" rel="noopener noreferrer" class="social-btn">
+        Arkdbar
+      </a>
+      <a href="https://www.instagram.com/arkdemia" target="_blank" rel="noopener noreferrer" class="social-btn">
+        Arkdemia
+      </a>
+      <a href="https://www.start.gg/tournament/arkdemia-2026/events" target="_blank" rel="noopener noreferrer"
+        class="social-btn">
+        Start.gg
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Scanline overlay -->
+<!--<div class="scanlines"></div> -->
+
+<div id="app" class="container">
+
+  <!-- Hero: Logo + Event Name -->
+  <div class="hero">
+    <img src="assets/images/logo.png" alt="ARKDEMIA — Fighting Game Event" class="hero-logo" />
+    <div class="hero-text">
+      <h1 class="hero-title">ARKDEMIA</h1>
+      <p class="hero-subtitle">ROAD TO BATTLE COLISEUM</p>
+      <p class="hero-description">
+        Promovendo o Esports e a cultura FGC no Amapá.<br>
+        Eventos, seletivas e incentivo a novos players.
+      </p>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- Game Selector with logos -->
+  <div id="game-selector" class="game-selector">
+    <button class="game-btn active" data-game="sf6" id="btn-sf6">
+      <img src="assets/images/logo_sf6.png" alt="Street Fighter 6" class="game-btn-logo" />
+    </button>
+    <button class="game-btn" data-game="2xko" id="btn-2xko">
+      <img src="assets/images/logo_2xko.png" alt="2XKO" class="game-btn-logo" />
+    </button>
+  </div>
+
+  <!-- Circuit Header -->
+  <header id="header" class="header">
+    <h2 class="header-title">
+      <span class="title-game" id="title-game">SF6</span>
+      <span class="title-circuit" id="title-circuit">ARKDEMIA</span>
+    </h2>
+    <div class="header-meta">
+      <p class="subtitle" id="subtitle">
+        ROAD TO BATTLE COLISEUM
+      </p>
+    </div>
+  </header>
+
+  <!-- Event Tabs -->
+  <nav id="event-tabs" class="event-tabs">
+    <button class="tab-btn active" data-event="geral" id="tab-geral">Geral</button>
+  </nav>
+
+  <!-- Loading -->
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando dados...</p>
+  </div>
+
+  <!-- Error -->
+  <div id="error" class="error-msg" style="display:none;">
+    <p>⚠ Erro ao carregar dados</p>
+  </div>
+
+  <!-- Leaderboard -->
+  <div id="leaderboard-section" style="display:none;">
+    <div class="column-headers">
+      <div class="col-left">
+        <span class="col-label col-pos">Colocação</span>
+        <span class="col-label">Jogador</span>
+      </div>
+      <span class="col-label" id="points-label">Pontuação</span>
+    </div>
+    <div id="leaderboard" class="leaderboard"></div>
+  </div>
+
+  <!-- Stats Footer -->
+  <div id="stats-footer" class="stats-footer" style="display:none;">
+    <div class="stat-card">
+      <div class="stat-icon svg-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path
+            d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z">
+          </path>
+        </svg>
+      </div>
+      <p class="stat-label" id="leader-label">Líder</p>
+      <p class="stat-value stat-leader" id="stat-leader">--</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon svg-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"></path>
+        </svg>
+      </div>
+      <p class="stat-label">Etapas</p>
+      <p class="stat-value stat-etapas" id="stat-etapas">--</p>
+    </div>
+  </div>
+
+  <!-- Photo Gallery -->
+  <div id="photo-gallery" class="photo-gallery" style="display:none;">
+    <h3 class="gallery-title">
+      📷 <span id="gallery-title-text">Fotos</span>
+    </h3>
+    <div id="gallery-grid" class="gallery-grid"></div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer id="sobre" class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col brand-col">
+      <h3 class="footer-brand">ARK<span class="brand-accent">DEMIA</span></h3>
+      <p class="footer-desc">
+        Fortalecendo o cenário de jogos de luta no Amapá.<br>
+        Road to Battle Coliseum 2026.
+      </p>
+    </div>
+    <div class="footer-col nav-col">
+      <h4 class="footer-heading">Navegação</h4>
+      <a href="#leaderboard-section">Ranking</a>
+      <a href="#photo-gallery">Fotos</a>
+      <a href="#sobre">Sobre</a>
+    </div>
+    <div class="footer-col social-col">
+      <h4 class="footer-heading">Social</h4>
+      <a href="https://www.instagram.com/arkdbar" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/logo_instagram.png" alt="" class="social-icon-footer" /> Arkdbar
+      </a>
+      <a href="https://www.instagram.com/arkdemia" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/logo_instagram.png" alt="" class="social-icon-footer" /> Arkdemia
+      </a>
+      <a href="https://www.start.gg/tournament/arkdemia-2026/events" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/logo_stargg.png" alt="" class="social-icon-footer" /> Start.gg
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>ARKDEMIA © 2026 — FGC AMAPÁ</p>
+    <p class="dev-credit">DEV BY
+      <a href="https://rayllanleitao.com.br" target="_blank" rel="noopener noreferrer">
+        <svg style="width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px;" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+        </svg>RAYLLANLEITAO.COM.BR
+      </a>
+      <span style="opacity: 0.5; margin: 0 0.5rem;">|</span>
+      <a href="mailto:hello@rayllan.dev">
+        <svg style="width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px;" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>hello@rayllan.dev
+      </a>
+    </p>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" style="display:none;">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt="Foto ampliada" />
+</div>
+
+<script src="js/app.js"></script>
+</body>
+
+</html>
